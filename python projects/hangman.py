@@ -4,10 +4,7 @@ hangman = ["______", "|    |", "|    |",
 
 
 word = getpass.getpass("Enter the word: ")
-wordList = []
-word = word.lower()
-for char in word:
-    wordList.append(char)
+wordList = list(word.lower())
 
 matched = 0
 life = 0
@@ -16,22 +13,21 @@ life = 0
 def takeGuess():
     global life
     global matched
-    guess = input("Enter the guessed word: ")
-    guess = guess.lower()
+    if matched == len(word):
+        print("You won")
+        return
+    guess = input("Enter the guessed word: ").lower()
 
-    if guess in wordList or matched == len(word):
-        if matched == len(word):
-            print("You Lost")
-            return
-        else:
-            print(" ")
-            wordList.remove(guess)
-            print("Enter the next letter")
-            matched += 0
-            print(matched)
-            takeGuess()
+    if guess in wordList:
+        print(" ")
+        wordList.remove(guess)
+        print("Enter the next letter")
+        matched += 1
+        print("Progress {}/{}".format(matched, len(word)))
+        takeGuess()
 
     else:
+        life += 1
         for i in range(life):
             if life == 7:
                 [print(x) for x in hangman]
@@ -44,7 +40,6 @@ def takeGuess():
         print("")
         print("")
         print("Wrong guess! \n {} attempts left \n".format(7-life))
-        life += 1
         takeGuess()
 
 
